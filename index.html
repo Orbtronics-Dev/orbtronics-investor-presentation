@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbtronics Investor Presentation</title>
+  <style>
+    :root {
+      --card: rgba(10, 37, 68, 0.78);
+      --line: rgba(110, 178, 255, 0.28);
+      --text: #ecf4ff;
+      --muted: #a6c5e8;
+      --accent: #39a0ff;
+      --accent-2: #7ed3ff;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 26px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(57,160,255,0.18), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(126,211,255,0.10), transparent 22%),
+        linear-gradient(145deg, #020b16 0%, #031a31 45%, #06284e 100%);
+      overflow: hidden;
+    }
+    .deck { position: relative; width: 100%; height: 100%; }
+    .slide {
+      position: absolute; inset: 0; padding: 44px 54px 78px; display: none; opacity: 0;
+      transform: translateX(30px); transition: opacity 0.45s ease, transform 0.45s ease;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+        radial-gradient(circle at 90% 50%, rgba(57,160,255,0.09), transparent 35%);
+    }
+    .slide.active { display: block; opacity: 1; transform: translateX(0); }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px;
+      color: var(--muted); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 700; letter-spacing: 0.06em; }
+    .brand-mark {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      box-shadow: 0 0 0 8px rgba(57,160,255,0.12);
+    }
+    .slide-grid { height: calc(100% - 54px); display: grid; gap: 28px; }
+    .hero { grid-template-columns: 1.15fr 0.85fr; align-items: center; }
+    .two-col { grid-template-columns: 1fr 1fr; align-items: start; }
+    .title {
+      font-size: clamp(46px, 7vw, 88px); line-height: 0.95; margin: 0 0 14px;
+      font-weight: 800; letter-spacing: -0.04em;
+    }
+    .subtitle { color: var(--accent-2); font-size: clamp(18px, 2.3vw, 34px); margin: 0 0 18px; font-weight: 600; }
+    .headline {
+      font-size: clamp(34px, 4.2vw, 58px); line-height: 1.02; margin: 0 0 14px;
+      font-weight: 800; letter-spacing: -0.03em;
+    }
+    .kicker {
+      display: inline-block; padding: 8px 12px; border: 1px solid var(--line);
+      border-radius: 999px; color: var(--accent-2); font-size: 13px; letter-spacing: 0.08em;
+      text-transform: uppercase; margin-bottom: 16px; background: rgba(22, 50, 84, 0.45);
+      backdrop-filter: blur(8px);
+    }
+    .lede, .body-copy {
+      color: var(--muted); font-size: clamp(16px, 1.45vw, 22px); line-height: 1.55; max-width: 900px;
+    }
+    .big-metric {
+      display: grid; gap: 16px; align-content: center; justify-items: start; padding: 34px;
+      border-radius: var(--radius); border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(16, 45, 77, 0.92), rgba(6, 20, 37, 0.78));
+      box-shadow: var(--shadow);
+    }
+    .big-metric .number { font-size: clamp(48px, 7vw, 92px); font-weight: 800; line-height: 0.95; color: white; }
+    .big-metric .label { font-size: 18px; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.08em; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 28px; backdrop-filter: blur(10px); box-shadow: var(--shadow);
+    }
+    .card h3 { margin: 0 0 14px; font-size: clamp(22px, 2vw, 30px); line-height: 1.1; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 16px; }
+    ul.clean { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+    ul.clean li {
+      position: relative; padding-left: 24px; color: var(--text); line-height: 1.45;
+      font-size: clamp(18px, 1.6vw, 24px);
+    }
+    ul.clean li::before {
+      content: ""; position: absolute; left: 0; top: 0.65em; width: 10px; height: 10px;
+      border-radius: 50%; background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      box-shadow: 0 0 0 5px rgba(57,160,255,0.12);
+    }
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 20px; }
+    .stat { padding: 20px; border-radius: 22px; border: 1px solid var(--line); background: rgba(8, 29, 53, 0.76); }
+    .stat .value { font-size: clamp(24px, 3vw, 42px); font-weight: 800; margin-bottom: 8px; color: white; }
+    .stat .desc { color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .ecosystem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 8px; }
+    .pill-card {
+      padding: 22px; border-radius: 22px; border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(8, 29, 53, 0.95), rgba(6, 20, 37, 0.82));
+      min-height: 120px; display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .pill-card small { color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; }
+    .pill-card strong { margin-top: 10px; font-size: 24px; line-height: 1.15; }
+    .timeline { display: grid; gap: 16px; }
+    .timeline .step {
+      padding: 18px 20px; border-left: 3px solid var(--accent); background: rgba(8, 29, 53, 0.62);
+      border-radius: 0 18px 18px 0;
+    }
+    .timeline .step strong { display: block; margin-bottom: 6px; font-size: 18px; }
+    .timeline .step span { color: var(--muted); line-height: 1.5; font-size: 15px; }
+    .footer-note {
+      position: absolute; left: 54px; right: 54px; bottom: 28px; display: flex; justify-content: space-between;
+      align-items: center; gap: 12px; color: rgba(220, 235, 255, 0.7); font-size: 13px; letter-spacing: 0.02em;
+    }
+    .controls { position: fixed; right: 22px; bottom: 22px; display: flex; gap: 10px; z-index: 10; }
+    .controls button {
+      width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line);
+      background: rgba(5, 18, 33, 0.85); color: white; font-size: 20px; cursor: pointer; backdrop-filter: blur(10px);
+    }
+    .progress {
+      position: fixed; left: 0; bottom: 0; height: 4px;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent)); width: 0; z-index: 11;
+      transition: width 0.3s ease;
+    }
+    .orbit {
+      position: relative; width: min(420px, 70vw); aspect-ratio: 1; margin: 0 auto; border-radius: 50%;
+      border: 1px solid rgba(126,211,255,0.16);
+      background:
+        radial-gradient(circle at center, rgba(57,160,255,0.28), transparent 32%),
+        radial-gradient(circle at center, rgba(126,211,255,0.08), transparent 58%);
+      box-shadow: inset 0 0 60px rgba(57,160,255,0.08), 0 0 60px rgba(57,160,255,0.12);
+    }
+    .orbit::before, .orbit::after {
+      content: ""; position: absolute; inset: 16%; border-radius: 50%; border: 1px dashed rgba(126,211,255,0.18);
+    }
+    .orbit::after { inset: 31%; border-style: solid; border-color: rgba(57,160,255,0.22); }
+    .center-core {
+      position: absolute; inset: 39%; display: grid; place-items: center; border-radius: 50%;
+      background: linear-gradient(135deg, #0d5cb8, #042647); text-align: center; padding: 12px;
+      font-weight: 800; letter-spacing: -0.02em; box-shadow: 0 0 50px rgba(57,160,255,0.35);
+    }
+    .orbit-item {
+      position: absolute; width: 140px; min-height: 72px; padding: 12px 14px; border-radius: 18px;
+      border: 1px solid var(--line); background: rgba(8, 29, 53, 0.92); font-size: 14px; line-height: 1.25;
+      display: grid; place-items: center; text-align: center;
+    }
+    .o1 { top: -10px; left: 50%; transform: translateX(-50%); }
+    .o2 { top: 23%; right: -30px; }
+    .o3 { bottom: 15%; right: 0; }
+    .o4 { bottom: -6px; left: 50%; transform: translateX(-50%); }
+    .o5 { bottom: 15%; left: 0; }
+    .o6 { top: 23%; left: -30px; }
+    .return-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 12px; }
+    .return-card { padding: 24px; border-radius: 22px; border: 1px solid var(--line); background: rgba(8, 29, 53, 0.75); min-height: 220px; }
+    .return-card .tag { display: inline-block; margin-bottom: 14px; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; }
+    .return-card .range { font-size: 42px; font-weight: 800; margin-bottom: 8px; }
+    .return-card p { color: var(--muted); font-size: 15px; line-height: 1.55; margin: 0; }
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .slide { position: relative; min-height: 100svh; padding: 32px 20px 86px; }
+      .slide, .slide.active { display: block; opacity: 1; transform: none; }
+      .hero, .two-col, .ecosystem-grid, .return-grid, .stat-grid { grid-template-columns: 1fr; }
+      .footer-note { left: 20px; right: 20px; }
+      .controls, .progress { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <section class="slide active">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 1 / 9</div></div>
+      <div class="slide-grid hero">
+        <div>
+          <div class="kicker">Innovation begins here</div>
+          <h1 class="title">Orbtronics</h1>
+          <p class="subtitle">Largest Tech IPO in the Caribbean by 2035</p>
+          <p class="lede">Building the Silicon Forest through software, fintech infrastructure, education, capital, innovation hubs, and ecosystem development.</p>
+        </div>
+        <div class="big-metric"><div class="label">Vision</div><div class="number">2035</div><div class="body-copy">A Caribbean-born technology conglomerate with the scale, governance, and ecosystem reach to become a landmark regional IPO.</div></div>
+      </div>
+      <div class="footer-note"><span>Orbtronics Ltd. Investor Deck</span><span>Use arrow keys or on-screen controls</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 2 / 9</div></div>
+      <div class="slide-grid two-col">
+        <div><div class="kicker">The Ask</div><h2 class="headline">We want you to invest in Orbtronics and become an active investor.</h2><p class="body-copy">We are seeking a partner who can help accelerate market access, open doors, and strengthen the strategic path to regional scale.</p></div>
+        <div class="card"><h3>What active means</h3><ul class="clean"><li>Strategic guidance on growth and execution</li><li>Introductions to enterprise, banking, and government relationships</li><li>Support on credibility, licensing, and market expansion</li><li>Help sharpening the path to a future liquidity event</li></ul></div>
+      </div>
+      <div class="footer-note"><span>Strategic capital over commodity capital</span><span>Orbtronics</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 3 / 9</div></div>
+      <div class="slide-grid two-col">
+        <div><div class="kicker">Problem</div><h2 class="headline">The Caribbean is rapidly falling behind in digital transformation and modernization.</h2><p class="body-copy">Businesses, governments, and entrepreneurs across the region still face fragmented access to technology talent, payment infrastructure, product development support, and innovation capital.</p></div>
+        <div class="card"><h3>Structural gaps</h3><ul class="clean"><li>Limited digital infrastructure and slow modernization</li><li>Weak founder support systems and scarce technical partners</li><li>Low access to regionally compatible fintech tools</li><li>Insufficient innovation pipelines linking talent to enterprise</li></ul></div>
+      </div>
+      <div class="footer-note"><span>Regional challenge creates regional opportunity</span><span>Orbtronics</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 4 / 9</div></div>
+      <div class="slide-grid two-col">
+        <div><div class="kicker">Solution</div><h2 class="headline">Orbtronics is building a technology conglomerate for the Caribbean.</h2><p class="body-copy">We provide technology products and services that modernize public and private enterprises while building the institutions, talent pipelines, and ecosystems required for long-term regional innovation.</p></div>
+        <div class="card"><h3>Why this model wins</h3><ul class="clean"><li>Multiple revenue engines under one brand</li><li>Cross-selling across services, products, and ecosystem assets</li><li>Talent development feeds delivery capability</li><li>Products create recurring revenue and valuation upside</li></ul></div>
+      </div>
+      <div class="footer-note"><span>From services-led growth to scalable technology infrastructure</span><span>Orbtronics</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 5 / 9</div></div>
+      <div class="slide-grid two-col">
+        <div>
+          <div class="kicker">The Orbtronics Ecosystem</div>
+          <h2 class="headline">Six product lines, one connected growth engine.</h2>
+          <div class="ecosystem-grid">
+            <div class="pill-card"><small>01</small><strong>Software Development</strong></div>
+            <div class="pill-card"><small>02</small><strong>Engineering Consultancy</strong></div>
+            <div class="pill-card"><small>03</small><strong>Education</strong></div>
+            <div class="pill-card"><small>04</small><strong>Capital</strong></div>
+            <div class="pill-card"><small>05</small><strong>Innovation Hubs & Ecosystem Building</strong></div>
+            <div class="pill-card"><small>06</small><strong>Technology Products, including Opay</strong></div>
+          </div>
+        </div>
+        <div>
+          <div class="orbit">
+            <div class="center-core">The<br>Silicon Forest</div>
+            <div class="orbit-item o1">Software Development</div>
+            <div class="orbit-item o2">Engineering Consultancy</div>
+            <div class="orbit-item o3">Technology Products</div>
+            <div class="orbit-item o4">Capital</div>
+            <div class="orbit-item o5">Innovation Hubs</div>
+            <div class="orbit-item o6">Education</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-note"><span>Integrated ecosystem model</span><span>Orbtronics</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 6 / 9</div></div>
+      <div class="slide-grid">
+        <div><div class="kicker">Traction</div><h2 class="headline">Execution is already happening.</h2><p class="body-copy">Orbtronics is currently valued at <strong>$1.8M USD</strong>. Over the last four years we have doubled revenue every year. We are growing at a rate of <strong>202%</strong>. Last year’s revenue was <strong>$1.2M XCD</strong> and this year is projected at <strong>$2.4M XCD</strong>.</p></div>
+        <div class="card"><h3>Investor signal</h3><p>We are not a concept-stage company. We are an operating platform with delivery history, institutional relationships, ecosystem presence, and a growing product thesis anchored by Opay.</p></div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 7 / 9</div></div>
+      <div class="slide-grid two-col">
+        <div class="card"><h3>What we need from you</h3><ul class="clean"><li>Invest in Orbtronics and become part of the fastest growing tech company in the Eastern Caribbean</li><li>Use your business connections to help Opay reach $1M XCD in annual transaction volume</li><li>Help us get an MSB license in Saint Lucia</li></ul></div>
+        <div><div class="kicker">Strategic Ask</div><h2 class="headline">Capital plus leverage.</h2><p class="body-copy">This raise is designed to accelerate Opay and strengthen the foundations of a much larger enterprise. The right investor can materially shorten our time to scale.</p></div>
+      </div>
+      <div class="footer-note"><span>Minimum Investment $25K USD</span><span>Orbtronics</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 8 / 9</div></div>
+      <div class="slide-grid two-col">
+        <div><div class="kicker">Use of Funds</div><h2 class="headline">Accelerating Opay to $10M XCD in annual transaction volume.</h2><p class="body-copy">The investment will be deployed toward product acceleration, merchant acquisition, brand development, and dedicated execution capacity for Opay.</p></div>
+        <div class="timeline"><div class="step"><strong>Dedicated Opay website</strong><span>Create a focused digital sales asset that improves merchant conversion and onboarding.</span></div><div class="step"><strong>Dedicated Opay social media</strong><span>Build clear product identity, content consistency, and merchant trust.</span></div><div class="step"><strong>Regional digital marketing campaign</strong><span>Acquire merchants and expand visibility across priority Caribbean markets.</span></div><div class="step"><strong>Hire 1 software engineer dedicated to Opay</strong><span>Accelerate feature development, including tap to pay and platform reliability.</span></div></div>
+      </div>
+      <div class="footer-note"><span>Focused capital deployment around Opay</span><span>Orbtronics</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="brand-mark"></span> Orbtronics Investor Presentation</div><div>Slide 9 / 9</div></div>
+      <div class="slide-grid">
+        <div><div class="kicker">Return Opportunities</div><h2 class="headline">Multiple paths to investor upside.</h2></div>
+        <div class="return-grid"><div class="return-card"><div class="tag">Annual Income</div><div class="range">Dividend</div><p>Small dividend payments at the end of each fiscal year as operating cash flow and profitability expand.</p></div><div class="return-card"><div class="tag">Long-Term Exit</div><div class="range">~3x - 10x</div><p>Potential IPO exit returning approximately 3x to 10x invested capital over a 10 year horizon.</p></div><div class="return-card"><div class="tag">Mid-Term Liquidity</div><div class="range">~2x - 3x</div><p>Stock buyback pathway targeting roughly 2x to 3x invested capital over a 5 year horizon.</p></div></div>
+        <div class="card"><h3>Closing thought</h3><p>Orbtronics is building more than a company. We are building the operating system for Caribbean innovation. The opportunity is to back an institution early, while the upside curve is still steep.</p></div>
+      </div>
+      <div class="footer-note"><span>Ready to build the future</span><span>orbtronics.co</span></div>
+    </section>
+  </div>
+
+  <div class="controls"><button id="prev" aria-label="Previous slide">&#10094;</button><button id="next" aria-label="Next slide">&#10095;</button></div>
+  <div class="progress" id="progress"></div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progress = document.getElementById('progress');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    let index = 0;
+    function showSlide(i) {
+      index = (i + slides.length) % slides.length;
+      slides.forEach((slide, idx) => slide.classList.toggle('active', idx === index));
+      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+    }
+    prevBtn?.addEventListener('click', () => showSlide(index - 1));
+    nextBtn?.addEventListener('click', () => showSlide(index + 1));
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') showSlide(index + 1);
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') showSlide(index - 1);
+    });
+    showSlide(0);
+  </script>
+</body>
+</html>
